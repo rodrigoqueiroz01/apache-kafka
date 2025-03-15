@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  zookeeper:
+    build: docker/zookeeper
+    container_name: zookeeper
+    restart: always
+    env_file:
+      - docker/zookeeper/zookeeper.env
+    volumes:
+      - '/opt/volumes/local/zookeeper/data:/var/lib/zookeeper/data'
+      - '/opt/volumes/local/zookeeper/logs:/var/lib/zookeeper/log'
+    networks:
+      - broker-kafka
+
+  kafka:
+    build: docker/kafka
+    container_name: kafka
+    restart: always
+    env_file:
+      - docker/kafka/kafka.env
+    volumes:
+      - '/opt/volumes/local/kafka/data:/var/lib/kafka/data'
+      - '/opt/volumes/local/kafka/logs:/var/lib/kafka/logs'
+    ports:
+      - '29092:29092'
+    depends_on:
+      - zookeeper
+    networks:
+      - broker-kafka
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    container_name: kafdrop
+    restart: always
+    env_file:
+      - docker/kafdrop/kafdrop.env
+    ports:
+      - '19000:9000'
+    depends_on:
+      - kafka
+    networks:
+      - broker-kafka
+
+networks:
+  broker-kafka:
+    driver: bridge
