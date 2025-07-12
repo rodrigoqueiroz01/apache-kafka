@@ -3,5 +3,6 @@ server:
 
 spring:
   kafka:
-    consumer:
-      bootstrap-servers: localhost:29092
+    bootstrap-servers: localhost:29092
+    properties:
+      security.protocol: PLAINTEXT
