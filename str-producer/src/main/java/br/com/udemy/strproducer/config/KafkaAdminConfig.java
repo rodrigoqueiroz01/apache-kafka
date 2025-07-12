@@ -1,6 +1,5 @@
 package br.com.udemy.strproducer.config;
 
-import lombok.AllArgsConstructor;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
@@ -10,11 +9,14 @@ import org.springframework.kafka.core.KafkaAdmin;
 
 import java.util.HashMap;
 
-@AllArgsConstructor
 @Configuration
 public class KafkaAdminConfig {
 
-    private final KafkaProperties properties;
+    public KafkaProperties properties;
+
+    public KafkaAdminConfig(KafkaProperties properties) {
+        this.properties = properties;
+    }
 
     @Bean
     public KafkaAdmin kafkaAdmin() {
@@ -26,11 +28,7 @@ public class KafkaAdminConfig {
     @Bean
     public KafkaAdmin.NewTopics topics() {
         return new KafkaAdmin.NewTopics(
-                TopicBuilder
-                        .name("str-topic")
-                        .partitions(2)
-                        .replicas(1)
-                        .build()
+                TopicBuilder.name("str-topic").partitions(2).replicas(1).build()
         );
     }
 
