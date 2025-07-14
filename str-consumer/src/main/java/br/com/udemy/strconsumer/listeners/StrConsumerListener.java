@@ -24,8 +24,9 @@ public class StrConsumerListener {
 //    )
 
     @StrConsumerCustomListener(groupId = "group-1")
-    public void create(String message) {
+    public void create(String message) throws Exception {
         LOG.info("CREATE :: Partition 0 :: Receive message: {}", message);
+        throw new IllegalArgumentException("EXCEPTION...");
     }
 
     @StrConsumerCustomListener(groupId = "group-1")
