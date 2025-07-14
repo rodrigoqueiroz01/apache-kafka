@@ -1,12 +1,16 @@
 package br.com.udemy.strconsumer.config;
 
+import br.com.udemy.strconsumer.listeners.StrConsumerListener;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.listener.RecordInterceptor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -14,6 +18,7 @@ import java.util.HashMap;
 @Component
 public class StringConsumerConfig {
 
+    private static final Logger LOG = LogManager.getLogger(StringConsumerConfig.class);
     private final KafkaProperties properties;
 
     public StringConsumerConfig(KafkaProperties properties) {
@@ -34,6 +39,24 @@ public class StringConsumerConfig {
         var factory = new ConcurrentKafkaListenerContainerFactory<String, String>();
         factory.setConsumerFactory(consumerFactory);
         return factory;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, String> validMessageContainerFactory(ConsumerFactory<String, String> consumerFactory) {
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, String>();
+        factory.setConsumerFactory(consumerFactory);
+        factory.setRecordInterceptor(validMessage());
+        return factory;
+    }
+
+    private RecordInterceptor<String, String> validMessage() {
+        return (record, consumer) -> {
+            if (record.value().contains("Teste")) {
+                LOG.info("Possui palavra teste");
+                return record;
+            }
+            return record;
+        };
     }
 
 }
