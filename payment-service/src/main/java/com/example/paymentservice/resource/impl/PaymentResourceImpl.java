@@ -23,7 +23,7 @@ public class PaymentResourceImpl implements PaymentResource {
     }
 
     @Override
-    public ResponseEntity<Payment> payment(Payment payment) {
+    public ResponseEntity<Payment> payment(Payment payment) throws InterruptedException {
         paymentService.sendPayment(payment);
         return ResponseEntity.status(CREATED).body(payment);
     }

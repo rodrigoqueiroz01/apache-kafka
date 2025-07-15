@@ -6,7 +6,7 @@ public class Payment implements Serializable {
 
     private Long id;
     private Long idUser;
-    private Long idProduto;
+    private Long idProduct;
     private String cardNumber;
 
     public Long getId() {
@@ -25,12 +25,12 @@ public class Payment implements Serializable {
         this.idUser = idUser;
     }
 
-    public Long getIdProduto() {
-        return idProduto;
+    public Long getIdProduct() {
+        return idProduct;
     }
 
-    public void setIdProduto(Long idProduto) {
-        this.idProduto = idProduto;
+    public void setIdProduct(Long idProduct) {
+        this.idProduct = idProduct;
     }
 
     public String getCardNumber() {
