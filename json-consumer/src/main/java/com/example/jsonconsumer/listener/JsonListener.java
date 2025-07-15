@@ -17,16 +17,19 @@ public class JsonListener {
     @KafkaListener(topics = "payment-topic", groupId = "create-group", containerFactory = "jsonContainerFactory")
     public void antiFraud(@Payload Payment payment) throws InterruptedException {
         LOG.info("Recebi o pagamento {}", payment.toString());
+        sleep(2000);
+
         LOG.info("Validando fraude...");
         sleep(2000);
 
         LOG.info("Recommendation: APPROVED...");
+        sleep(2000);
     }
 
     @KafkaListener(topics = "payment-topic", groupId = "pdf-group", containerFactory = "jsonContainerFactory")
-    public void pdfGenerator() throws InterruptedException {
-        LOG.info("Gerando PDF...");
-        sleep(2000);
+    public void pdfGenerator(@Payload Payment payment) throws InterruptedException {
+        LOG.info("Gerando PDF do produto de id {}", payment.getId());
+        sleep(3000);
     }
 
     @KafkaListener(topics = "payment-topic", groupId = "email-group", containerFactory = "jsonContainerFactory")
